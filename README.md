@@ -13,7 +13,7 @@
 1. Make sure you have [Go](https://golang.org/dl/) installed (version 1.17 or later).
 2. Install the tool by executing following command:
    ```sh
-   go install https://github.com/isira-adithya/filter-waf@latest
+   go install github.com/isira-adithya/filter-waf@latest
    ```
 
 ## Usage
