@@ -103,8 +103,8 @@ func check_url(url string, verbose *bool, wg *sync.WaitGroup) {
 	payload := strings.NewReader("user_id=1'\"%20OR%201%3d;SLEEP(1)%231=1&email=\"><script>alert(1)</script>&password=${{7*7}}")
 
 	// Create a HTTP request object
-	url = url + "/login?email=\"><script>alert(1)</script>&password=${{7*7}}&submit=true"
-	req, err := http.NewRequest("GET", url, payload)
+	var prepared_url = url + "/login?email=\"><script>alert(1)</script>&password=${{7*7}}&submit=true"
+	req, err := http.NewRequest("GET", prepared_url, payload)
 	if err != nil {
 		if *verbose {
 			fmt.Println("Error creating request object")
