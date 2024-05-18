@@ -76,6 +76,8 @@ func main() {
 }
 
 func check_url(url string, verbose *bool, wg *sync.WaitGroup) {
+	defer wg.Done()
+
 	// Check if the URL is reachable
 	if *verbose {
 		fmt.Println("Checking URL: ", url)
@@ -86,7 +88,10 @@ func check_url(url string, verbose *bool, wg *sync.WaitGroup) {
 	// Creating Cookie Jar
 	jar, err := cookiejar.New(nil)
 	if err != nil {
-		fmt.Println("Error creating cookie jar")
+		if *verbose {
+			fmt.Println("Error creating cookie jar")
+		}
+		return
 	}
 
 	// Creating HTTP Client
@@ -101,7 +106,9 @@ func check_url(url string, verbose *bool, wg *sync.WaitGroup) {
 	url = url + "/login?email=\"><script>alert(1)</script>&password=${{7*7}}&submit=true"
 	req, err := http.NewRequest("GET", url, payload)
 	if err != nil {
-		fmt.Println("Error creating request object")
+		if *verbose {
+			fmt.Println("Error creating request object")
+		}
 	}
 
 	// Set the headers
@@ -115,7 +122,10 @@ func check_url(url string, verbose *bool, wg *sync.WaitGroup) {
 	// Send the request
 	resp, err := client.Do(req)
 	if err != nil {
-		fmt.Println("Error sending request")
+		if *verbose {
+			fmt.Println("Error sending request")
+		}
+		return
 	}
 
 	// If the response code is not 401 or 403, print the URL
@@ -130,6 +140,4 @@ func check_url(url string, verbose *bool, wg *sync.WaitGroup) {
 			fmt.Println("[!] [", resp.Status, "] URL ", url, " is restricted")
 		}
 	}
-
-	defer wg.Done()
 }
